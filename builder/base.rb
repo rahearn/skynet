@@ -2,7 +2,8 @@ module Builder
   class Base
 
     def initialize(config)
-      @config = config
+      @config          = config
+      @options         = config[:builder_options]
       @local_repo_path = File.join tmpdir, 'skynet'
     end
 
@@ -14,6 +15,10 @@ module Builder
 
     def tmpdir
       @tmpdir ||= ENV["TMPDIR"] || File.join(File.dirname(__FILE__), '..', 'tmp')
+    end
+
+    def build_repository
+      repo_exists? ? update_repo : create_repo
     end
 
     def create_repo

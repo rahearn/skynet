@@ -19,7 +19,7 @@ class SkyNet < Sinatra::Base
   post '/skynet' do
     payload = JSON.parse params[:payload]
     if settings.repository == payload['repository']['url']
-      Builder.const_get(settings.builder).new(settings.config).run
+      Builder.run :builder => settings.builder, :config => settings.config
       "Thanks!"
     else
       puts "Wrong repository"
@@ -27,4 +27,5 @@ class SkyNet < Sinatra::Base
     end
   end
 
+  Builder.run(:builder => settings.builder, :config => settings.config) if settings.config[:run_on_startup]
 end

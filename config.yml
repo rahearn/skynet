@@ -2,9 +2,10 @@
 
 :defaults: &defaults
   :repository: 'https://github.com/coshx/skynet'
-  :builder: 'Static'
+  :run_on_startup: true
+  :builder: 'Jekyll'
   :builder_options:
-    :source: 'public'
+    :source: 'jekyll'
     :destination: 'public'
 
 :development:
