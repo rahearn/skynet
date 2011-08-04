@@ -1,5 +1,6 @@
 require 'bundler/setup'
 Bundler.require :default
-require File.join File.dirname(__FILE__), 'sky_net'
+$:.unshift File.dirname __FILE__
+require 'sky_net'
 
 run SkyNet

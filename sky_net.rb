@@ -1,6 +1,5 @@
 require 'sinatra/base'
 require 'yaml'
-$:.unshift File.dirname __FILE__
 require 'builder'
 
 class SkyNet < Sinatra::Base
