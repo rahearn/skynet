@@ -1,5 +1,4 @@
 require 'sinatra/base'
-require 'json'
 require 'yaml'
 $:.unshift File.dirname __FILE__
 require 'builder'
@@ -32,5 +31,4 @@ class SkyNet < Sinatra::Base
     end
   end
 
-  run! if app_file == $0
 end
