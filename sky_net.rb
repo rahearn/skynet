@@ -1,6 +1,8 @@
 require 'sinatra/base'
 require 'json'
 require 'yaml'
+$:.unshift File.dirname __FILE__
+require 'builder'
 
 class SkyNet < Sinatra::Base
 
@@ -22,8 +24,7 @@ class SkyNet < Sinatra::Base
   post '/skynet' do
     payload = JSON.parse params[:payload]
     if settings.repository == payload['repository']['url']
-      # builder = "SkyNet::Builder::#{settings.builder}".constantize.new(config)
-      # builder.run
+      Builder.const_get(settings.builder).new(settings.config).run
       "Thanks!"
     else
       puts "Wrong repository"
