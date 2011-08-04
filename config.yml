@@ -3,6 +3,9 @@
 :defaults: &defaults
   :repository: 'https://github.com/coshx/skynet'
   :builder: 'Static'
+  :builder_options:
+    :source: 'public'
+    :destination: 'public'
 
 :development:
   <<: *defaults
