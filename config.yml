@@ -1,0 +1,9 @@
+# Base configuration for SkyNet
+
+
+:development:
+  :repository: 'https://github.com/rahearn/skynet'
+  :builder: 'SkyNet'
+
+:production:
+  :repository: <%= ENV["SKYNET_REPO_URL"] %>
