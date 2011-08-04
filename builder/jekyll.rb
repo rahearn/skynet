@@ -3,7 +3,7 @@
 module Builder
   class Jekyll < Builder::Base
 
-    def run
+    def build
       puts 'Jekyll running...'
       build_repository
 

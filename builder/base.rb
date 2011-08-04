@@ -7,7 +7,7 @@ module Builder
       @local_repo_path = File.join tmpdir, 'skynet'
     end
 
-    def run
+    def build
       raise "Must be implemented in subclass"
     end
 

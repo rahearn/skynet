@@ -3,7 +3,7 @@
 module Builder
   class Static < Builder::Base
 
-    def run
+    def build
       puts 'Static running...'
       build_repository
 
