@@ -1,7 +1,7 @@
 # File updater using jekyll for processing
 
-module Builder
-  class Jekyll < Builder::Base
+module Skynet::Builder
+  class Jekyll < Base
 
     def build
       puts 'Jekyll running...'

@@ -1,9 +1,11 @@
-require 'builder/base'
-require 'builder/static'
-require 'builder/jekyll'
+require 'skynet/builder/base'
+require 'skynet/builder/static'
+require 'skynet/builder/jekyll'
 
-module Builder
-  def self.build(opts)
-    Builder.const_get(opts[:builder]).new(opts[:config]).build
+module Skynet
+  module Builder
+    def self.build(opts)
+      Builder.const_get(opts[:builder]).new(opts[:config]).build
+    end
   end
 end
