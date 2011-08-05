@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require 'skynet/cli'
+
+Skynet::CLI.start
