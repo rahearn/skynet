@@ -19,11 +19,13 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_runtime_dependency 'sinatra', '~> 1.2'
-  s.add_runtime_dependency 'thin',    '~> 1.2'
-  s.add_runtime_dependency 'json',    '~> 1.5'
-  s.add_runtime_dependency 'jekyll',  '~> 0.11'
-  s.add_runtime_dependency 'thor',    '~> 0.14'
+  s.add_runtime_dependency 'sinatra',       '~> 1.2'
+  s.add_runtime_dependency 'thin',          '~> 1.2'
+  s.add_runtime_dependency 'json',          '~> 1.5'
+  s.add_runtime_dependency 'jekyll',        '~> 0.11'
+  s.add_runtime_dependency 'thor',          '~> 0.14'
+  s.add_runtime_dependency 'activesupport', '~> 3.0'
+  s.add_runtime_dependency 'i18n'
 
   s.add_development_dependency 'heroku',     '~> 2.4'
   s.add_development_dependency 'showoff-io', '~> 0.3'
