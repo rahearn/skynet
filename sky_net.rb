@@ -15,6 +15,10 @@ class SkyNet < Sinatra::Base
     enable :logging
   end
 
+  get '/' do
+    send_file File.join(settings.public, 'index.html')
+  end
+
   post '/skynet' do
     payload = JSON.parse params[:payload]
     if settings.repository == payload['repository']['url']
