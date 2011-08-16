@@ -1,0 +1,8 @@
+---
+layout: post
+title: The Doctor is in
+---
+
+h2. On the acceptability of multiple markdown formats within a Skynet install
+
+It is acceptable
