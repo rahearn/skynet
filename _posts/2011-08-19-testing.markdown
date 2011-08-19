@@ -1,5 +1,0 @@
----
-title: Testing
----
-
-Hello, this is a test.
