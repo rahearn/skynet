@@ -30,4 +30,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'heroku',     '~> 2.4'
   s.add_development_dependency 'showoff-io', '~> 0.3'
   s.add_development_dependency 'foreman',    '~> 0.19'
+  s.add_development_dependency 'rake',       '~> 0.9.2'
 end
