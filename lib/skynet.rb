@@ -1,5 +1,6 @@
 require 'sinatra/base'
 require 'yaml'
+require 'json'
 require 'skynet/builder'
 
 module Skynet
