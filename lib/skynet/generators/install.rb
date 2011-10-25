@@ -29,7 +29,9 @@ module Skynet
       end
 
       def copy_rackup
-        unless appname.nil?
+        if appname.nil?
+          template('config-no-app.ru', 'config.ru')
+        else
           @appname = appname.camelize
           @appfile = appname.underscore
           template('config.ru', 'config.ru')
