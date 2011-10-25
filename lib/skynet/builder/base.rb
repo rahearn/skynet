@@ -1,4 +1,4 @@
-module Builder
+module Skynet::Builder
   class Base
 
     def initialize(config)

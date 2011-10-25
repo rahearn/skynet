@@ -1,16 +1,15 @@
 # Base configuration for SkyNet
 
 :defaults: &defaults
-  :repository: 'https://github.com/coshx/skynet'
+  :repository: '<%= repo %>'
   :build_on_startup: true
-  :builder: 'Jekyll'
+  :builder: '<%= @builder %>'
   :builder_options:
-    :source: 'jekyll'
+    :source: '<%= @source %>'
     :destination: 'public'
 
 :development:
   <<: *defaults
-  :repository: 'https://github.com/rahearn/skynet'
 
 :production:
   <<: *defaults

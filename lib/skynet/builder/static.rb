@@ -1,7 +1,7 @@
 # Static files updater
 
-module Builder
-  class Static < Builder::Base
+module Skynet::Builder
+  class Static < Base
 
     def build
       puts 'Static running...'
