@@ -14,7 +14,7 @@ module Skynet::Builder
     private
 
     def tmpdir
-      @tmpdir ||= ENV["TMPDIR"] || File.join(File.dirname(__FILE__), '..', 'tmp')
+      @tmpdir ||= ENV["TMPDIR"] || File.join(Dir.pwd, 'tmp')
     end
 
     def build_repository
@@ -22,7 +22,7 @@ module Skynet::Builder
     end
 
     def create_repo
-      `rm -rf #{@local_repo_path}` if repo_exists?
+      `rm -rf #{@local_repo_path}`
       `mkdir -p #{tmpdir}; cd #{tmpdir}; git clone #{@config[:repository]} skynet`
     end
 
@@ -31,7 +31,7 @@ module Skynet::Builder
     end
 
     def repo_exists?
-      File.exist?(@local_repo_path)
+      File.exist? File.join(@local_repo_path, '.git')
     end
   end
 end
