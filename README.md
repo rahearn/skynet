@@ -15,6 +15,6 @@ Current Builder Types
 Usage
 -----
 * Install Skynet: `$ gem install skynet-deploy`
-* Install basic config file: `$ skynet config`
+* Install basic config file: `$ skynet config <first project name>`
 * edit config file to add your repositories
 * Start server: `$ skynet server`

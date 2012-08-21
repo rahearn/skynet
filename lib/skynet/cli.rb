@@ -1,13 +1,17 @@
 require 'thor'
-require 'skynet/generators/install'
 
 module Skynet
   class CLI < Thor
+    include Thor::Actions
 
-    desc "install REPOSITORY_URL [AppName]", "Installs generic Profile, config.ru and config.yml"
-    method_options :builder => 'jekyll'
-    def install(repo, appname=nil)
-      Skynet::Generators::Install.start
+    def self.source_root
+      File.join File.dirname(__FILE__), 'templates'
+    end
+
+    desc "config PROJECT_NAME", "Installs config.yml started for PROJECT_NAME"
+    def config(name)
+      @project_name = name
+      template('config.yml', 'config.yml')
     end
 
   end

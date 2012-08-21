@@ -1,0 +1,15 @@
+# Base configuration for SkyNet
+#
+# Example project:
+#
+# project_name:
+#   url: git@github.com:project_name.git
+#   branch: master
+#   type: jekyll
+#   destination: /var/www/project_name
+
+<%= @project_name %>:
+  url: git@github.com:<%= @project_name %>.git
+  branch: master
+  type: 
+  destination: 
