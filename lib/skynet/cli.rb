@@ -15,9 +15,11 @@ module Skynet
     end
 
     desc "server", "starts the skynet server"
-    method_option :port, type: :numeric, default: 7575, required: true, aliases: '-p'
-    method_option :host, type: :string, default: '0.0.0.0', required: true, aliases: '-h'
+    method_option :port, type: :numeric, default: 7575, aliases: '-p', desc: 'Port to listen on'
+    method_option :host, type: :string, default: '0.0.0.0', aliases: '-h', desc: 'Interface to listen on'
     def server
+      Skynet.logger = Logger.new 'skynet.log', 'weekly'
+
       server = Thin::Server.new(options[:host], options[:port]) do
         run Skynet::App
       end
@@ -36,8 +38,15 @@ module Skynet
       raise NotImplementedError
     end
 
-    desc "config PROJECT_NAME", "Installs config.yml started for PROJECT_NAME"
-    def config(name)
+    desc "check", "Verifies correctness of config.yml"
+    method_option :file, type: :string, default: './config.yml', aliases: '-f', desc: 'File to check'
+    def check
+      Skynet.logger.debug "RCA file: #{options[:file]}"
+      raise NotImplementedError
+    end
+
+    desc "config [PROJECT_NAME]", "Installs config.yml started for PROJECT_NAME"
+    def config(name="PROJECT_NAME")
       @project_name = name
       template('config.yml', 'config.yml')
     end

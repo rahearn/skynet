@@ -9,7 +9,7 @@ module Skynet
   autoload :CLI,     'skynet/cli'
 
   def self.logger
-    @logger ||= Logger.new('skynet.log', 'weekly')
+    @logger ||= Logger.new(STDOUT)
   end
 
   def self.logger=(logger)
