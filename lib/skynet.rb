@@ -1,31 +1,19 @@
-require 'sinatra/base'
-require 'yaml'
-require 'json'
-require 'skynet/builder'
+require 'skynet/version'
+
+require 'logger'
 
 module Skynet
 
-  class Skynet < Sinatra::Base
+  autoload :Builder, 'skynet/builder'
+  autoload :App,     'skynet/app'
+  autoload :CLI,     'skynet/cli'
 
-    configure do
-      set :app_file,   'skynet.rb'
-      set :config,     YAML.load_file(File.join(root, 'config.yml'))[environment]
-      set :repository, config[:repository]
-      set :builder,    config[:builder]
-    end
+  def self.logger
+    @logger ||= Logger.new($stdout)
+  end
 
-    post '/skynet' do
-      payload = JSON.parse params[:payload]
-      if settings.repository == payload['repository']['url']
-        Builder.build :builder => settings.builder, :config => settings.config
-        "Thanks!"
-      else
-        puts "Wrong repository"
-        "Sorry, not configured for this repository"
-      end
-    end
-
-    Builder.build(:builder => settings.builder, :config => settings.config) if settings.config[:build_on_startup]
+  def self.logger=(logger)
+    @logger = logger
   end
 
 end
