@@ -1,16 +1,18 @@
 # Static files updater
 
-module Skynet::Builder
-  class Static < Base
+module Skynet
+  module Builder
+    class Static < Base
 
-    def build
-      puts 'Static running...'
-      build_repository
+      def build
+        Skynet.logger.info "Static running for #{@app}..."
 
-      source_directory = File.join(@local_repo_path, @options[:source], '.')
-      FileUtils.cp_r(source_directory, @options[:destination])
-      puts 'Static finished'
+        build_repository
+        FileUtils.cp_r @source, @destination
+
+        Skynet.logger.debug 'Static build finished'
+      end
+
     end
-
   end
 end

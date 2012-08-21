@@ -5,11 +5,11 @@ describe Skynet::Builder do
   describe ".build" do
     let(:builder)    { mock('builder').as_null_object }
     let(:mock_class) { mock('builder class').as_null_object }
-    let(:args)       { {:builder => :builder, :config => :config} }
+    let(:args)       { {builder: :builder, app: :app, config: :config} }
 
     it "initializes a new builder class" do
       described_class.should_receive(:const_get).with(:builder).and_return mock_class
-      mock_class.should_receive(:new).with(:config).and_return builder
+      mock_class.should_receive(:new).with(:app, :config).and_return builder
 
       described_class.build args
     end

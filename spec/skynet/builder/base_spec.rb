@@ -2,24 +2,13 @@ require 'spec_helper'
 
 describe Skynet::Builder::Base do
 
-  let(:options) { {} }
-  let(:tmpdir)  { 'tmpdir' }
-  let(:lrp)     { File.join tmpdir, 'skynet' }
-  subject       { described_class.new options }
-  before(:each) { ENV['TMPDIR'] = tmpdir }
+  let(:options) { {'branch' => 'master'} }
+  let(:base)    { File.join Dir.pwd, 'app' }
+  let(:source)  { File.join base, 'master' }
+  subject       { described_class.new 'app', options }
 
-  describe "#tmpdir" do
-    it "prefers the enviornment variable" do
-      subject.send(:tmpdir).should == tmpdir
-    end
-
-    context "without TMPDIR set" do
-      before(:each) { ENV['TMPDIR'] = nil }
-
-      it "falls back on tmp dir in working directory" do
-        subject.send(:tmpdir).should == File.join(Dir.pwd, 'tmp')
-      end
-    end
+  describe "#build" do
+    it { expect { subject.build }.to raise_error NotImplementedError }
   end
 
   describe "#build_repository" do
@@ -43,28 +32,24 @@ describe Skynet::Builder::Base do
   end
 
   describe "#create_repo" do
-    let(:options) { {:repository => 'repo'} }
+    let(:options) { {'branch' => 'master', 'url' => 'repo'} }
     before(:each) do
-      subject.stub(:tmpdir).and_return tmpdir
-      subject.should_receive(:`).with "rm -rf #{lrp}"
-      subject.should_receive(:`).with "mkdir -p #{tmpdir}; cd #{tmpdir}; git clone repo skynet"
+      subject.should_receive(:`).with "rm -rf #{source}"
+      subject.should_receive(:`).with "mkdir -p #{base}; cd #{base}; git clone repo master"
     end
 
     it { subject.send :create_repo }
   end
 
   describe "#update_repo" do
-    before(:each) { subject.should_receive(:`).with "cd #{lrp}; git pull" }
+    before(:each) { subject.should_receive(:`).with "cd #{source}; git pull" }
 
     it { subject.send :update_repo }
   end
 
   describe "#repo_exists?" do
-    let(:repo_path) { 'repo_path' }
     before(:each) do
-      File.stub(:join).with(tmpdir, 'skynet').and_return 'tmpdir/skynet'
-      File.stub(:join).with('tmpdir/skynet', '.git').and_return repo_path
-      File.should_receive(:exist?).with repo_path
+      File.should_receive(:exist?).with File.join(source, '.git')
     end
 
     it { subject.send :repo_exists? }
