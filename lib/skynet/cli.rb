@@ -1,5 +1,6 @@
 require 'thor'
 require 'thin'
+require 'yaml'
 
 module Skynet
   class CLI < Thor
@@ -17,8 +18,18 @@ module Skynet
     desc "server", "starts the skynet server"
     method_option :port, type: :numeric, default: 7575, aliases: '-p', desc: 'Port to listen on'
     method_option :host, type: :string, default: '0.0.0.0', aliases: '-h', desc: 'Interface to listen on'
+    method_option :file, type: :string, default: './config.yml', aliases: '-f', desc: 'Configuration file'
     def server
       Skynet.logger = Logger.new 'skynet.log', 'weekly'
+
+      unless File.exist? options[:file]
+        Skynet.logger.fatal "Configuration file #{options[:file]} cannot be found"
+        raise ArgumentError.new "Cannot find configuration file"
+      end
+
+      Skynet::App.configure do |app|
+        app.set :config, YAML.load_file(options[:file])
+      end
 
       server = Thin::Server.new(options[:host], options[:port]) do
         run Skynet::App
@@ -33,7 +44,7 @@ module Skynet
       end
     end
 
-    desc "build [PROJECT_NAME]", "Builds all applicatoins, or PROJECT_NAME only if given"
+    desc "build [PROJECT_NAME]", "Builds all applications, or PROJECT_NAME only if given"
     def build(name="")
       raise NotImplementedError
     end
@@ -45,7 +56,7 @@ module Skynet
       raise NotImplementedError
     end
 
-    desc "config [PROJECT_NAME]", "Installs config.yml started for PROJECT_NAME"
+    desc "config [PROJECT_NAME]", "Generate config.yml, stubbed out for for PROJECT_NAME"
     def config(name="PROJECT_NAME")
       @project_name = name
       template('config.yml', 'config.yml')
