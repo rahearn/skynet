@@ -3,10 +3,9 @@ require 'spec_helper'
 describe Skynet::Builder::Static do
 
   let(:app)     { 'app' }
-  let(:branch)  { 'master' }
   let(:dest)    { '/var/www/app' }
-  let(:options) { {branch: branch, destination: dest} }
-  let(:source)  { File.join Dir.pwd, app, branch }
+  let(:options) { {destination: dest} }
+  let(:source)  { File.join Dir.pwd, app }
   subject       { described_class.new app, options }
 
   describe "#build" do

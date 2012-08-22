@@ -4,8 +4,7 @@ require 'shoulda-matchers'
 
 describe Skynet::Builder::Base do
 
-  let(:base)    { File.join Dir.pwd, 'app' }
-  let(:source)  { File.join base, 'master' }
+  let(:source)  { File.join Dir.pwd, 'app' }
   let(:repo)    { 'git@github.com:app.git' }
   let(:options) { {url: repo, branch: 'master', destination: '/var/www', type: 'static'} }
   subject       { described_class.new 'app', options }
@@ -51,15 +50,15 @@ describe Skynet::Builder::Base do
 
   describe "#create_repo" do
     before(:each) do
-      subject.should_receive(:`).with "rm -rf #{source}; mkdir -p #{base}"
-      subject.should_receive(:`).with "cd #{base}; git clone #{repo} master"
+      subject.should_receive(:`).with "rm -rf #{source}"
+      subject.should_receive(:`).with "git clone #{repo} app; cd #{source}; git checkout master"
     end
 
     it { subject.send :create_repo }
   end
 
   describe "#update_repo" do
-    before(:each) { subject.should_receive(:`).with "cd #{source}; git pull" }
+    before(:each) { subject.should_receive(:`).with "cd #{source}; git checkout master; git pull" }
 
     it { subject.send :update_repo }
   end

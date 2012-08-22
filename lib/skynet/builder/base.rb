@@ -20,11 +20,10 @@ module Skynet
         self.app         = app
         @config          = config
         self.url         = config[:url]
-        self.branch      = config[:branch] || 'master'
+        self.branch      = config[:branch]
         self.destination = config[:destination]
         self.type        = config[:type]
-        @source_base     = File.join Dir.pwd, app
-        @source          = File.join @source_base, branch
+        @source          = File.join Dir.pwd, app
       end
 
       def build
@@ -42,12 +41,12 @@ module Skynet
       end
 
       def create_repo
-        Skynet.logger.debug `rm -rf #{source}; mkdir -p #@source_base`
-        Skynet.logger.info `cd #@source_base; git clone #{url} #{branch}`
+        Skynet.logger.debug `rm -rf #{source}`
+        Skynet.logger.info `git clone #{url} #{app}; cd #{source}; git checkout #{branch}`
       end
 
       def update_repo
-        Skynet.logger.info `cd #{source}; git pull`
+        Skynet.logger.info `cd #{source}; git checkout #{branch}; git pull`
       end
 
       def repo_exists?
