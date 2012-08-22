@@ -12,7 +12,14 @@ describe Skynet::Builder::Static do
     before(:each) do
       subject.should_receive :build_repository
       subject.stub(:valid?).and_return true
-      FileUtils.stub :rm_rf
+      Dir.stub(:glob).and_return [:one, :two]
+    end
+
+    it "removes destination files first" do
+      FileUtils.stub :remove_entry_secure
+      FileUtils.stub :cp_r
+      FileUtils.should_receive(:rm_rf).with [:one, :two], secure: true
+      subject.build
     end
 
     it "copies files to the destination" do

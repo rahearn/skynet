@@ -34,9 +34,6 @@ module Skynet
         end
 
         build_repository
-
-        Skynet.logger.debug "Removing #{destination}/*"
-        FileUtils.rm_rf Dir.glob(File.join destination, '*'), secure: true
       end
 
       private

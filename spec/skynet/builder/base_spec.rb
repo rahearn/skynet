@@ -20,14 +20,9 @@ describe Skynet::Builder::Base do
 
   describe "#build" do
     context "when valid" do
-      it "removes files in the destination first" do
-        Dir.stub(:glob).and_return [:one, :two]
-        subject.stub :build_repository
-        FileUtils.should_receive(:rm_rf).with [:one, :two], secure: true
-        subject.build
-      end
+      before(:each) { subject.stub :build_repository }
+      it { expect { subject.build }.to_not raise_error }
     end
-
     context "when invalid" do
       let(:options) { {} }
       it { expect { subject.build }.to raise_error ArgumentError }

@@ -8,6 +8,9 @@ module Skynet
         Skynet.logger.info "Static running for #{app}..."
         super
 
+        Skynet.logger.debug "Removing #{destination}/*"
+        FileUtils.rm_rf Dir.glob(File.join destination, '*'), secure: true
+
         Skynet.logger.debug "Copying #{source} to #{destination}"
         FileUtils.cp_r source, destination
 
