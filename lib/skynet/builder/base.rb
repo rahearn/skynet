@@ -1,37 +1,58 @@
-module Skynet::Builder
-  class Base
+require 'active_model'
 
-    def initialize(config)
-      @config          = config
-      @options         = config[:builder_options]
-      @local_repo_path = File.join tmpdir, 'skynet'
-    end
+module Skynet
+  module Builder
 
-    def build
-      raise "Must be implemented in subclass"
-    end
+    ALLOWED_BUILDERS = Dir.entries(File.dirname(__FILE__)).select { |f| f =~ /^\w+(?<!base)\.rb$/ }.map { |f| f.chomp '.rb' }
 
-    private
+    class Base
+      include ActiveModel::Validations
 
-    def tmpdir
-      @tmpdir ||= ENV["TMPDIR"] || File.join(File.dirname(__FILE__), '..', 'tmp')
-    end
+      attr_accessor :app, :url, :branch, :destination, :type
+      attr_reader :source
 
-    def build_repository
-      repo_exists? ? update_repo : create_repo
-    end
+      validates_presence_of :app, :url, :branch, :destination
+      validates_inclusion_of :type,
+        in: ALLOWED_BUILDERS,
+        message: "must be one of #{ALLOWED_BUILDERS}"
 
-    def create_repo
-      `rm -rf #{@local_repo_path}` if repo_exists?
-      `mkdir -p #{tmpdir}; cd #{tmpdir}; git clone #{@config[:repository]} skynet`
-    end
+      def initialize(app, config)
+        self.app         = app
+        @config          = config
+        self.url         = config[:url]
+        self.branch      = config[:branch] || 'master'
+        self.destination = config[:destination]
+        self.type        = config[:type]
+        @source_base     = File.join Dir.pwd, app
+        @source          = File.join @source_base, branch
+      end
 
-    def update_repo
-      `cd #{@local_repo_path}; git pull`
-    end
+      def build
+        unless valid?
+          Skynet.logger.error "Configuration error for #{app}"
+          Skynet.logger.error errors.full_messages.join '. '
+          raise ArgumentError
+        end
+      end
 
-    def repo_exists?
-      File.exist?(@local_repo_path)
+      private
+
+      def build_repository
+        repo_exists? ? update_repo : create_repo
+      end
+
+      def create_repo
+        Skynet.logger.debug `rm -rf #{source}; mkdir -p #@source_base`
+        Skynet.logger.info `cd #@source_base; git clone #{url} #{branch}`
+      end
+
+      def update_repo
+        Skynet.logger.info `cd #{source}; git pull`
+      end
+
+      def repo_exists?
+        File.exist? File.join(source, '.git')
+      end
     end
   end
 end

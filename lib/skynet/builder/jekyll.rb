@@ -1,18 +1,20 @@
 # File updater using jekyll for processing
 
-module Skynet::Builder
-  class Jekyll < Base
+module Skynet
+  module Builder
+    class Jekyll < Base
 
-    def build
-      puts 'Jekyll running...'
-      build_repository
+      def build
+        super
 
-      destination = File.join FileUtils.pwd, @options[:destination]
-      source = File.join @local_repo_path, @options[:source]
-      `jekyll #{source} #{destination}`
+        Skynet.logger.info "Jekyll running for #{app}..."
 
-      puts 'Jekyll finished'
+        build_repository
+        Skynet.logger.info `jekyll #{source} #{destination}`
+
+        Skynet.logger.info 'Jekyll finished'
+      end
+
     end
-
   end
 end
