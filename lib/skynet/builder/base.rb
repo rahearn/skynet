@@ -1,19 +1,38 @@
+require 'active_model'
+
 module Skynet
   module Builder
+
+    ALLOWED_BUILDERS = Dir.entries(File.dirname(__FILE__)).select { |f| f =~ /^\w+(?<!base)\.rb$/ }.map { |f| f.chomp '.rb' }
+
     class Base
+      include ActiveModel::Validations
+
+      attr_accessor :app, :url, :branch, :destination, :type
+      attr_reader :source
+
+      validates_presence_of :app, :url, :branch, :destination
+      validates_inclusion_of :type,
+        in: ALLOWED_BUILDERS,
+        message: "must be one of #{ALLOWED_BUILDERS}"
 
       def initialize(app, config)
-        @app         = app
-        @config      = config
-        @repo        = config['url']
-        @branch      = config['branch']
-        @destination = config['destination']
-        @source_base = File.join Dir.pwd, @app
-        @source      = File.join @source_base, @branch
+        self.app         = app
+        @config          = config
+        self.url         = config[:url]
+        self.branch      = config[:branch] || 'master'
+        self.destination = config[:destination]
+        self.type        = config[:type]
+        @source_base     = File.join Dir.pwd, app
+        @source          = File.join @source_base, branch
       end
 
       def build
-        raise NotImplementedError.new "Must be implemented in subclass"
+        unless valid?
+          Skynet.logger.fatal "Configuration error for #{app}"
+          Skynet.logger.fatal errors.full_messages.join '. '
+          raise ArgumentError
+        end
       end
 
       private
@@ -23,16 +42,16 @@ module Skynet
       end
 
       def create_repo
-        `rm -rf #{@source}`
-        `mkdir -p #{@source_base}; cd #{@source_base}; git clone #{@repo} #{@branch}`
+        `rm -rf #{source}`
+        `mkdir -p #{@source_base}; cd #{@source_base}; git clone #{url} #{branch}`
       end
 
       def update_repo
-        `cd #{@source}; git pull`
+        `cd #{source}; git pull`
       end
 
       def repo_exists?
-        File.exist? File.join(@source, '.git')
+        File.exist? File.join(source, '.git')
       end
     end
   end

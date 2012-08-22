@@ -1,14 +1,32 @@
 require 'spec_helper'
+require 'active_model'
+require 'shoulda-matchers'
 
 describe Skynet::Builder::Base do
 
-  let(:options) { {'branch' => 'master'} }
   let(:base)    { File.join Dir.pwd, 'app' }
   let(:source)  { File.join base, 'master' }
+  let(:repo)    { 'git@github.com:app.git' }
+  let(:options) { {url: repo, branch: 'master', destination: '/var/www', type: 'static'} }
   subject       { described_class.new 'app', options }
 
+  describe ".validations" do
+    it { should validate_presence_of :app }
+    it { should validate_presence_of :url }
+    it { should validate_presence_of :branch }
+    it { should validate_presence_of :destination }
+    it { should ensure_inclusion_of(:type).in_array(%w[static jekyll]).allow_nil(false).allow_blank(false) }
+    it { should_not allow_value('base').for :type }
+  end
+
   describe "#build" do
-    it { expect { subject.build }.to raise_error NotImplementedError }
+    context "when valid" do
+      it { expect { subject.build }.to_not raise_error }
+    end
+    context "when invalid" do
+      let(:options) { {} }
+      it { expect { subject.build }.to raise_error ArgumentError }
+    end
   end
 
   describe "#build_repository" do
@@ -32,10 +50,9 @@ describe Skynet::Builder::Base do
   end
 
   describe "#create_repo" do
-    let(:options) { {'branch' => 'master', 'url' => 'repo'} }
     before(:each) do
       subject.should_receive(:`).with "rm -rf #{source}"
-      subject.should_receive(:`).with "mkdir -p #{base}; cd #{base}; git clone repo master"
+      subject.should_receive(:`).with "mkdir -p #{base}; cd #{base}; git clone #{repo} master"
     end
 
     it { subject.send :create_repo }

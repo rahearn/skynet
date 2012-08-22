@@ -1,6 +1,7 @@
 require 'thor'
 require 'thin'
 require 'yaml'
+require 'active_support/core_ext/hash/indifferent_access'
 
 module Skynet
   class CLI < Thor
@@ -19,8 +20,9 @@ module Skynet
     method_option :port, type: :numeric, default: 7575, aliases: '-p', desc: 'Port to listen on'
     method_option :host, type: :string, default: '0.0.0.0', aliases: '-h', desc: 'Interface to listen on'
     method_option :file, type: :string, default: './config.yml', aliases: '-f', desc: 'Configuration file'
+    method_option :log, type: :string, default: 'skynet.log', aliases: '-l', desc: 'Log file'
     def server
-      Skynet.logger = Logger.new 'skynet.log', 'weekly'
+      Skynet.logger = Logger.new options[:log], 'weekly'
 
       unless File.exist? options[:file]
         Skynet.logger.fatal "Configuration file #{options[:file]} cannot be found"
@@ -28,7 +30,7 @@ module Skynet
       end
 
       Skynet::App.configure do |app|
-        app.set :config, YAML.load_file(options[:file])
+        app.set :config, load_configuration(options[:file])
       end
 
       server = Thin::Server.new(options[:host], options[:port]) do
@@ -40,20 +42,45 @@ module Skynet
       rescue => ex
         Skynet.logger.error ex.message
         Skynet.logger.error ex.backtrace.join("\n")
-        rase ex
+        raise ex
       end
     end
 
     desc "build [PROJECT_NAME]", "Builds all applications, or PROJECT_NAME only if given"
-    def build(name="")
-      raise NotImplementedError
+    method_option :file, type: :string, default: './config.yml', aliases: '-f', desc: 'Configuration file'
+    def build(name=nil)
+      all_apps = load_configuration options[:file]
+
+      if name.nil?
+        all_apps.each do |app, config|
+          begin
+            Builder.build app, config
+          rescue ArgumentError
+            next
+          end
+        end
+      else
+        config = all_apps[name]
+        if config.nil?
+          Skynet.logger.error "Could not find configuration for #{name}"
+        else
+          Builder.build name, config
+        end
+      end
     end
 
     desc "check", "Verifies correctness of config.yml"
     method_option :file, type: :string, default: './config.yml', aliases: '-f', desc: 'File to check'
     def check
-      Skynet.logger.debug "RCA file: #{options[:file]}"
-      raise NotImplementedError
+      all_apps = load_configuration options[:file]
+      all_apps.each do |app, config|
+        builder = Builder.for_app app, config
+        if builder.valid?
+          puts "#{app} configuration is valid"
+        else
+          puts "#{app} configuration errors: #{builder.errors.full_messages.join '. '}"
+        end
+      end
     end
 
     desc "config [PROJECT_NAME]", "Generate config.yml, stubbed out for for PROJECT_NAME"
@@ -62,5 +89,10 @@ module Skynet
       template('config.yml', 'config.yml')
     end
 
+    private
+
+    def load_configuration(file)
+      YAML.load_file(file).with_indifferent_access
+    end
   end
 end

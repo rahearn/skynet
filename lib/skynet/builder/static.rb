@@ -5,10 +5,12 @@ module Skynet
     class Static < Base
 
       def build
-        Skynet.logger.info "Static running for #{@app}..."
+        super
+
+        Skynet.logger.info "Static running for #{app}..."
 
         build_repository
-        FileUtils.cp_r @source, @destination
+        FileUtils.cp_r source, destination
 
         Skynet.logger.debug 'Static build finished'
       end

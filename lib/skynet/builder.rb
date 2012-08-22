@@ -5,8 +5,15 @@ module Skynet
     autoload :Static, 'skynet/builder/static'
     autoload :Jekyll, 'skynet/builder/jekyll'
 
-    def self.build(opts)
-      Builder.const_get(opts[:builder]).new(opts[:app], opts[:config]).build
+    def self.build(app, config)
+      for_app(app, config).build
+    end
+
+    def self.for_app(app, config, type=nil)
+      type ||= config[:type] || 'base'
+      const_get("#{type[0].upcase}#{type.reverse.chop.reverse}").new app, config
+    rescue NameError
+      for_app(app, config, 'base')
     end
 
   end

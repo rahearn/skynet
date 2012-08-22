@@ -1,5 +1,4 @@
 require 'skynet/version'
-
 require 'logger'
 
 module Skynet
