@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Ryan Ahearn"]
   s.email       = ["ryan@coshx.com"]
-  s.homepage    = ""
+  s.homepage    = "https://github.com/coshx/skynet"
   s.summary     = %q{Sinatra app that listens for GitHub post-receive callbacks and deploys your code}
   s.description = %q{Sinatra app that listens for GitHub post-receive callbacks and deploys your code}
 
