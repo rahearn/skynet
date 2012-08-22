@@ -9,7 +9,7 @@
 #   destination: /var/www/project_name
 
 <%= @project_name %>:
-  url: git@github.com:<%= @project_name %>.git
+  url: https://github.com/ORGANIZATION/<%= @project_name %>
   branch: master
   type: 
   destination: 

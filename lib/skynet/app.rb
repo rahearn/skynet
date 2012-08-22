@@ -9,7 +9,7 @@ module Skynet
       %[Hello. Check <a href="https://github.com/coshx/skynet">github</a> for more infomation on skynet]
     end
 
-    post '/:app_name' do
+    post '/:app_name' do |app_name|
       Skynet.logger.debug "params: #{params.inspect}"
       payload = JSON.parse params[:payload]
       config  = settings.config[app_name]
@@ -26,7 +26,7 @@ module Skynet
     def deployable?(config, payload)
       !config.nil? &&
         config[:url] == payload['repository']['url'] &&
-        payload['ref'] == "refs/head/#{config[:branch]}"
+        payload['ref'] == "refs/heads/#{config[:branch]}"
     end
   end
 
