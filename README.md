@@ -17,4 +17,5 @@ Usage
 * Install Skynet: `$ gem install skynet-deploy`
 * Install basic config file: `$ skynet config <first project name>`
 * edit config file to add your repositories
+* Run builder by hand to ensure everything works: `$ skynet build`
 * Start server: `$ skynet server`
