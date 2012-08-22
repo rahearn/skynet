@@ -10,9 +10,9 @@ module Skynet
         Skynet.logger.info "Jekyll running for #{app}..."
 
         build_repository
-        `jekyll #{source} #{destination}`
+        Skynet.logger.info `jekyll #{source} #{destination}`
 
-        Skynet.logger.debug 'Jekyll finished'
+        Skynet.logger.info 'Jekyll finished'
       end
 
     end

@@ -40,8 +40,8 @@ module Skynet
       begin
         server.start!
       rescue => ex
-        Skynet.logger.error ex.message
-        Skynet.logger.error ex.backtrace.join("\n")
+        Skynet.logger.fatal ex.message
+        Skynet.logger.fatal ex.backtrace.join("\n")
         raise ex
       end
     end

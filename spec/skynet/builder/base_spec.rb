@@ -51,8 +51,8 @@ describe Skynet::Builder::Base do
 
   describe "#create_repo" do
     before(:each) do
-      subject.should_receive(:`).with "rm -rf #{source}"
-      subject.should_receive(:`).with "mkdir -p #{base}; cd #{base}; git clone #{repo} master"
+      subject.should_receive(:`).with "rm -rf #{source}; mkdir -p #{base}"
+      subject.should_receive(:`).with "cd #{base}; git clone #{repo} master"
     end
 
     it { subject.send :create_repo }

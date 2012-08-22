@@ -29,8 +29,8 @@ module Skynet
 
       def build
         unless valid?
-          Skynet.logger.fatal "Configuration error for #{app}"
-          Skynet.logger.fatal errors.full_messages.join '. '
+          Skynet.logger.error "Configuration error for #{app}"
+          Skynet.logger.error errors.full_messages.join '. '
           raise ArgumentError
         end
       end
@@ -42,12 +42,12 @@ module Skynet
       end
 
       def create_repo
-        `rm -rf #{source}`
-        `mkdir -p #{@source_base}; cd #{@source_base}; git clone #{url} #{branch}`
+        Skynet.logger.debug `rm -rf #{source}; mkdir -p #@source_base`
+        Skynet.logger.info `cd #@source_base; git clone #{url} #{branch}`
       end
 
       def update_repo
-        `cd #{source}; git pull`
+        Skynet.logger.info `cd #{source}; git pull`
       end
 
       def repo_exists?

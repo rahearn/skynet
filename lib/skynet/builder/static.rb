@@ -12,7 +12,7 @@ module Skynet
         build_repository
         FileUtils.cp_r source, destination
 
-        Skynet.logger.debug 'Static build finished'
+        Skynet.logger.info 'Static build finished'
       end
 
     end
