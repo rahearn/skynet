@@ -23,7 +23,7 @@ module Skynet
         self.branch      = config[:branch]
         self.destination = config[:destination]
         self.type        = config[:type]
-        @source          = File.join Dir.pwd, app
+        @source          = File.join Dir.pwd, app, '.'
       end
 
       def build
@@ -41,11 +41,13 @@ module Skynet
       end
 
       def create_repo
+        Skynet.logger.debug "Creating repository for #{app}"
         Skynet.logger.debug `rm -rf #{source}`
         Skynet.logger.info `git clone #{url} #{app}; cd #{source}; git checkout #{branch}`
       end
 
       def update_repo
+        Skynet.logger.debug "Updating repository for #{app}"
         Skynet.logger.info `cd #{source}; git checkout #{branch}; git pull`
       end
 

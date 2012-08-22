@@ -4,7 +4,7 @@ require 'shoulda-matchers'
 
 describe Skynet::Builder::Base do
 
-  let(:source)  { File.join Dir.pwd, 'app' }
+  let(:source)  { File.join Dir.pwd, 'app', '.' }
   let(:repo)    { 'git@github.com:app.git' }
   let(:options) { {url: repo, branch: 'master', destination: '/var/www', type: 'static'} }
   subject       { described_class.new 'app', options }

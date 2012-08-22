@@ -8,8 +8,9 @@ module Skynet
         super
 
         Skynet.logger.info "Jekyll running for #{app}..."
-
         build_repository
+
+        Skynet.logger.debug "PWD: #{Dir.pwd} Source: #{source} Destination: #{destination}"
         Skynet.logger.info `jekyll #{source} #{destination}`
 
         Skynet.logger.info 'Jekyll finished'
