@@ -26,7 +26,8 @@ module Skynet
     def deployable?(config, payload)
       !config.nil? &&
         config[:url] == payload['repository']['url'] &&
-        payload['ref'] == "refs/heads/#{config[:branch]}"
+        payload['ref'] == "refs/heads/#{config[:branch]}" &&
+        payload['after'] !~ /^0{40}$/
     end
   end
 
