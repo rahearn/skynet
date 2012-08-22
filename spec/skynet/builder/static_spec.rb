@@ -15,7 +15,14 @@ describe Skynet::Builder::Static do
     end
 
     it "copies files to the destination" do
+      FileUtils.stub :remove_entry_secure
       FileUtils.should_receive(:cp_r).with(source, dest)
+      subject.build
+    end
+
+    it "removes .git from the destination" do
+      FileUtils.stub :cp_r
+      FileUtils.should_receive(:remove_entry_secure).with "#{dest}/.git"
       subject.build
     end
   end
