@@ -12,6 +12,7 @@ describe Skynet::Builder::Jekyll do
     before(:each) do
       subject.should_receive :build_repository
       subject.stub(:valid?).and_return true
+      FileUtils.stub :rm_rf
     end
 
     it "runs jekyll with the source and destination" do

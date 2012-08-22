@@ -32,6 +32,11 @@ module Skynet
           Skynet.logger.error errors.full_messages.join '. '
           raise ArgumentError
         end
+
+        build_repository
+
+        Skynet.logger.debug "Removing #{destination}/*"
+        FileUtils.rm_rf Dir.glob(File.join destination, '*'), secure: true
       end
 
       private

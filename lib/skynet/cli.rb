@@ -83,7 +83,7 @@ module Skynet
       end
     end
 
-    desc "config [PROJECT_NAME]", "Generate config.yml, stubbed out for for PROJECT_NAME"
+    desc "config [PROJECT_NAME]", "Generate config.yml, stubbed out for PROJECT_NAME"
     def config(name="PROJECT_NAME")
       @project_name = name
       template('config.yml', 'config.yml')

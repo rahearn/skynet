@@ -5,10 +5,8 @@ module Skynet
     class Static < Base
 
       def build
-        super
-
         Skynet.logger.info "Static running for #{app}..."
-        build_repository
+        super
 
         Skynet.logger.debug "Copying #{source} to #{destination}"
         FileUtils.cp_r source, destination

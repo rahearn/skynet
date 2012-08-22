@@ -5,10 +5,8 @@ module Skynet
     class Jekyll < Base
 
       def build
-        super
-
         Skynet.logger.info "Jekyll running for #{app}..."
-        build_repository
+        super
 
         Skynet.logger.debug "PWD: #{Dir.pwd} Source: #{source} Destination: #{destination}"
         Skynet.logger.info `jekyll #{source} #{destination}`
