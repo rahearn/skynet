@@ -18,4 +18,5 @@ Usage
 * Install basic config file: `$ skynet config <first project name>`
 * edit config file to add your repositories
 * Run builder by hand to ensure everything works: `$ skynet build`
+* Add `http://YOUR_SERVER/PROJECT_NAME` as a WebHook URL to your repository under `Admin -> Service Hooks`
 * Start server: `$ skynet server`
