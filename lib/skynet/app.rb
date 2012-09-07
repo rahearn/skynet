@@ -27,7 +27,7 @@ module Skynet
     def deployable?
       @config.present? &&
         @config[:url] == @payload['repository']['url'] &&
-        payload['after'] !~ /^0{40}$/
+        @payload['after'] !~ /^0{40}$/
     end
 
     def branch
