@@ -23,6 +23,26 @@ Usage
 * Add `http://YOUR_SKYNET_SERVER/PROJECT_NAME` as a WebHook URL to your repository under `Admin -> Service Hooks`
 * Start server: `$ skynet server`
 
+Config file arguments
+---------------------
+
+### Required configuration variables for each project: ###
+* `url` Value passed from post-receive hook to verify that the deploy
+  should happen
+* `type` The builder type to invoke for this application
+* Either `branch` and `destination` together or only `branches` must be specified
+
+### Optional configuration variables: ###
+* `key` SSH private key file to be used to clone and pull from private
+  repositories. Should be given as an absolute path
+* `repository` The location to clone the repository from. This is
+  usually inferred from `url`, but can be overridden here
+* `branch` The branch to be deployed
+* `destination` Absolute path to the deployed application
+* `branches` For when multiple branches should be deployed to this
+  machine (such as a production + staging strategy). `branches` is a
+  hash with keys being the branch name and values being the destination
+
 Example Post-Receive Hook
 -------------------------
 

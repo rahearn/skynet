@@ -1,4 +1,4 @@
-# Base configuration for SkyNet
+# Base configuration for Skynet
 #
 # Example for single branch deployment:
 # project_name:
@@ -14,9 +14,17 @@
 #   branches:
 #     master: /var/www/project_name_production
 #     develop: /var/www/project_name_staging
+#
+#  Example for private repository deployment:
+#  project_name:
+#    url: https://github.com/owner/project_name
+#    type: jekyll
+#    key: /home/username/.ssh/id_rsa
+#    branch: master
+#    destination: /var/www/project_name
 
 <%= @project_name %>:
-  url: https://github.com/ORGANIZATION/<%= @project_name %>
+  url: https://github.com/ORGANIZATION_OR_USER/<%= @project_name %>
   branch: master
   type: 
   destination: 
