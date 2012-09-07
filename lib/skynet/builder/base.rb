@@ -19,16 +19,19 @@ module Skynet
       validate :branches_have_destinations
 
       def initialize(app, config)
-        self.app         = app
-        @config          = config
-        self.url         = config[:url]
+        self.app = app
+        @config  = config
+        @source  = File.join Dir.pwd, app, '.'
+
         if config[:branches].blank?
           self.branches = { config[:branch] => config[:destination] }
         else
           self.branches = config[:branches]
         end
+        self.branch      = branches.first[0]
+        self.destination = branches.first[1]
+        self.url         = config[:url]
         self.type        = config[:type]
-        @source          = File.join Dir.pwd, app, '.'
       end
 
       def build(branch=nil)
