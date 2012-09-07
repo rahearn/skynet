@@ -1,12 +1,19 @@
 # Base configuration for SkyNet
 #
-# Example project:
-#
+# Example for single branch deployment:
 # project_name:
-#   url: git@github.com:project_name.git
-#   branch: master
+#   url: https://github.com/owner/project_name
 #   type: jekyll
+#   branch: master
 #   destination: /var/www/project_name
+#
+# Example for multiple branch deployment:
+# project_name:
+#   url: https://github.com/owner/project_name
+#   type: jekyll
+#   branches:
+#     master: /var/www/project_name_production
+#     develop: /var/www/project_name_staging
 
 <%= @project_name %>:
   url: https://github.com/ORGANIZATION/<%= @project_name %>

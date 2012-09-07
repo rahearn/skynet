@@ -6,17 +6,16 @@ describe Skynet::Builder::Jekyll do
   let(:dest)    { '/var/www/app' }
   let(:options) { {destination: dest} }
   let(:source)  { File.join Dir.pwd, app, '.' }
-  subject       { described_class.new app, options }
-
-  describe "#build" do
-    before(:each) do
-      subject.should_receive :build_repository
-      subject.stub(:valid?).and_return true
+  subject do
+    described_class.new(app, options).tap do |b|
+      b.destination = dest
     end
+  end
 
+  describe "#execute" do
     it "runs jekyll with the source and destination" do
       subject.should_receive(:`).with "jekyll #{source} #{dest}"
-      subject.build
+      subject.execute
     end
   end
 end

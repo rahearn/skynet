@@ -5,8 +5,8 @@ module Skynet
     autoload :Static, 'skynet/builder/static'
     autoload :Jekyll, 'skynet/builder/jekyll'
 
-    def self.build(app, config)
-      for_app(app, config).build
+    def self.build(app, config, branch=nil)
+      for_app(app, config).build branch
     end
 
     def self.for_app(app, config, type=nil)

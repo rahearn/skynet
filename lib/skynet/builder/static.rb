@@ -4,10 +4,7 @@ module Skynet
   module Builder
     class Static < Base
 
-      def build
-        Skynet.logger.info "Static running for #{app}..."
-        super
-
+      def execute
         Skynet.logger.debug "Removing #{destination}/*"
         FileUtils.rm_rf Dir.glob(File.join destination, '*'), secure: true
 

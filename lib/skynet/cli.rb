@@ -46,12 +46,12 @@ module Skynet
       end
     end
 
-    desc "build [PROJECT_NAME]", "Builds all applications, or PROJECT_NAME only if given"
+    desc "build [PROJECT_NAME] [BRANCH_NAME]", "Builds all applications, or PROJECT_NAME only if given"
     method_option :file, type: :string, default: './config.yml', aliases: '-f', desc: 'Configuration file'
-    def build(name=nil)
+    def build(project=nil, branch=nil)
       all_apps = load_configuration options[:file]
 
-      if name.nil?
+      if project.nil?
         all_apps.each do |app, config|
           begin
             Builder.build app, config
@@ -60,11 +60,11 @@ module Skynet
           end
         end
       else
-        config = all_apps[name]
+        config = all_apps[project]
         if config.nil?
-          Skynet.logger.error "Could not find configuration for #{name}"
+          Skynet.logger.error "Could not find configuration for #{project}"
         else
-          Builder.build name, config
+          Builder.build project, config, branch
         end
       end
     end
