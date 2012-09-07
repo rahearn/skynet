@@ -1,4 +1,5 @@
 require 'active_model'
+require 'active_support/core_ext/object/blank'
 
 module Skynet
   module Builder
@@ -8,32 +9,49 @@ module Skynet
     class Base
       include ActiveModel::Validations
 
-      attr_accessor :app, :url, :branch, :destination, :type
+      attr_accessor :app, :url, :branch, :destination, :branches, :type
       attr_reader :source
 
-      validates_presence_of :app, :url, :branch, :destination
+      validates_presence_of :app, :url, :branch, :destination, :branches
       validates_inclusion_of :type,
         in: ALLOWED_BUILDERS,
         message: "must be one of #{ALLOWED_BUILDERS}"
+      validate :branches_have_destinations
 
       def initialize(app, config)
         self.app         = app
         @config          = config
         self.url         = config[:url]
-        self.branch      = config[:branch]
-        self.destination = config[:destination]
+        if config[:branches].blank?
+          self.branches = { config[:branch] => config[:destination] }
+        else
+          self.branches = config[:branches]
+        end
         self.type        = config[:type]
         @source          = File.join Dir.pwd, app, '.'
       end
 
-      def build
-        unless valid?
-          Skynet.logger.error "Configuration error for #{app}"
-          Skynet.logger.error errors.full_messages.join '. '
-          raise ArgumentError
+      def build(branch=nil)
+        unless branch.blank?
+          return if branches[branch].blank?
+          self.branches = { branch => branches[branch] }
         end
 
-        build_repository
+        branches.each_pair do |branch, destination|
+          self.branch      = branch.to_s
+          self.destination = destination
+
+          if valid?
+            Skynet.logger.info "#{type} running for #{app} (branch: #{branch})"
+          else
+            Skynet.logger.error "Configuration error for #{app} (branch: #{branch})"
+            Skynet.logger.error errors.full_messages.join '. '
+            raise ArgumentError
+          end
+
+          build_repository
+          execute
+        end
       end
 
       private
@@ -50,11 +68,18 @@ module Skynet
 
       def update_repo
         Skynet.logger.debug "Updating repository for #{app}"
-        Skynet.logger.info `cd #{source}; git checkout #{branch}; git pull`
+        Skynet.logger.info `cd #{source}; git checkout #{branch}; git pull origin #{branch}`
       end
 
       def repo_exists?
         File.exist? File.join(source, '.git')
+      end
+
+      def branches_have_destinations
+        return if branches.blank?
+        branches.each_pair do |b, d|
+          errors.add(:branches, "#{b} must have a destination") unless d.present?
+        end
       end
     end
   end

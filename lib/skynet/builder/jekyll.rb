@@ -4,10 +4,7 @@ module Skynet
   module Builder
     class Jekyll < Base
 
-      def build
-        Skynet.logger.info "Jekyll running for #{app}..."
-        super
-
+      def execute
         Skynet.logger.debug "PWD: #{Dir.pwd} Source: #{source} Destination: #{destination}"
         Skynet.logger.info `jekyll #{source} #{destination}`
 
