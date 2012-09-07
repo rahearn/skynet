@@ -1,5 +1,6 @@
 require 'sinatra/base'
 require 'json'
+require 'active_support/core_ext/object/blank'
 
 module Skynet
 
@@ -11,10 +12,10 @@ module Skynet
 
     post '/:app_name' do |app_name|
       Skynet.logger.debug "params: #{params.inspect}"
-      payload = JSON.parse params[:payload]
-      config  = settings.config[app_name]
-      if deployable? config, payload
-        Builder.build app_name, config
+      @payload = JSON.parse params[:payload]
+      @config  = settings.config[app_name]
+      if deployable?
+        Builder.build app_name, @config, branch
       else
         Skynet.logger.warn "#{app_name} is not deployable"
       end
@@ -23,11 +24,15 @@ module Skynet
 
     private
 
-    def deployable?(config, payload)
-      !config.nil? &&
-        config[:url] == payload['repository']['url'] &&
-        payload['ref'] == "refs/heads/#{config[:branch]}" &&
+    def deployable?
+      @config.present? &&
+        @config[:url] == @payload['repository']['url'] &&
         payload['after'] !~ /^0{40}$/
+    end
+
+    def branch
+      @payload['ref'] =~ %r[^refs/heads/(.*)$]
+      $1
     end
   end
 
