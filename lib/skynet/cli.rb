@@ -83,13 +83,25 @@ module Skynet
       end
     end
 
-    desc "config [PROJECT_NAME]", "Generate config.yml, stubbed out for PROJECT_NAME"
-    def config(name="PROJECT_NAME")
-      @project_name = name
-      template('config.yml', 'config.yml')
+    desc "install", "Generate config.yml"
+    method_option :wizard, type: :boolean, default: false, aliases: '-w', desc: 'Run configuration wizard'
+    def install
+      copy_file 'config.yml'
+      run_wizard if options[:wizard]
+    end
+
+    desc 'config', 'Run a wizard to append a new project to existing config.yml'
+    method_option :file, type: :string, default: './config.yml', aliases: '-f', desc: 'Configuration file'
+    def config
+      copy_file 'config.yml', options[:file] unless File.exists? options[:file]
+      run_wizard options[:file]
     end
 
     private
+
+    def run_wizard(file = './config.yml')
+      append_file file, Wizard.new.run
+    end
 
     def load_configuration(file)
       YAML.load_file(file).with_indifferent_access

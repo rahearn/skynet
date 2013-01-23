@@ -6,6 +6,7 @@ module Skynet
   autoload :Builder, 'skynet/builder'
   autoload :App,     'skynet/app'
   autoload :CLI,     'skynet/cli'
+  autoload :Wizard,  'skynet/wizard'
 
   def self.logger
     @logger ||= Logger.new(STDOUT)
