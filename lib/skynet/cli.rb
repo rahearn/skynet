@@ -83,10 +83,10 @@ module Skynet
       end
     end
 
-    desc "config [PROJECT_NAME]", "Generate config.yml, stubbed out for PROJECT_NAME"
-    def config(name="PROJECT_NAME")
-      @project_name = name
-      template('config.yml', 'config.yml')
+    desc "install", "Generate config.yml"
+    #method_option :wizard, type: :boolean, default: false, aliases: '-w', desc: 'Run configuration wizard'
+    def install
+      copy_file 'config.yml'
     end
 
     private
