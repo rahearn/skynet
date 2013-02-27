@@ -27,6 +27,8 @@ module Skynet
         @key     = config[:key]
 
         if config[:branches].blank?
+          Skynet.logger.warn "Passing a single branch and destination is deprecated and will be removed in 2.0"
+          Skynet.logger.warn "Please change to:\nbranches:\n  #{config[:branch]}: #{config[:destination]}"
           self.branches = { config[:branch] => config[:destination] }
         else
           self.branches = config[:branches]
