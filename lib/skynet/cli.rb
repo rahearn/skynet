@@ -97,6 +97,20 @@ module Skynet
       run_wizard options[:file]
     end
 
+    desc 'hook PROJECT_NAME', 'Generates an example post_receive hook for PROJECT_NAME'
+    method_option :file, type: :string, default: './config.yml', aliases: '-f', desc: 'Configuration file'
+    method_option :output, type: :string, default: './post-receive', aliases: '-o', desc: 'Output file'
+    method_option :server, type: :string, default: 'http://localhost:7575', aliases: '-s', desc: 'Location of running skynet server'
+    def hook(project)
+      if File.exists? options[:output]
+        Skynet.logger.fatal %{Output file "#{options[:output]}" already exists}
+        exit 1
+      end
+      config = load_configuration(options[:file])[project]
+      server = "#{options[:server].chomp '/'}/#{project}"
+      HookGenerator.new(config, server, options[:output]).generate
+    end
+
     private
 
     def run_wizard(file = './config.yml')
