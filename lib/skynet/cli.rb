@@ -118,6 +118,10 @@ module Skynet
     end
 
     def load_configuration(file)
+      unless File.exists? file
+        Skynet.logger.fatal %{Configuration file "#{file}" does not exist}
+        exit 1
+      end
       YAML.load_file(file).with_indifferent_access
     end
   end
