@@ -15,7 +15,7 @@ module Skynet
     end
 
     post '/' do
-      Skynet.logger.debug "post root params: #{params.inspect}"
+      Skynet.logger.debug "post '/' params: #{params.inspect}"
       app_name = settings.config.each { |n, c| break n if c[:url] == @payload['repository']['url'] }
       if app_name.is_a? String
         deploy app_name
@@ -26,14 +26,14 @@ module Skynet
     end
 
     post '/:app_name' do |app_name|
-      Skynet.logger.debug "post /#{app_name} params: #{params.inspect}"
+      Skynet.logger.debug "post '/#{app_name}' params: #{params.inspect}"
       deploy app_name
     end
 
     private
 
     def deploy(app_name)
-      Skynet.logger.info %{Attempting to deploy "#{app_name.class.name}"}
+      Skynet.logger.info %{Attempting to deploy "#{app_name}"}
       config = settings.config[app_name]
       if deployable? config
         Builder.build app_name, config, branch
