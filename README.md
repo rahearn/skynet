@@ -1,6 +1,8 @@
 Skynet
 ======
 
+[![Build Status](https://travis-ci.org/coshx/skynet.svg?branch=master)](https://travis-ci.org/coshx/skynet)
+
 GitHub-aware website builder
 
 Skynet builds and deploys web sites on your VPS or bare metal server. It is triggered by the post-receive hook.
@@ -20,7 +22,8 @@ Usage
 * Install basic config file: `$ skynet config <first project name>`
 * edit config file to add your repositories
 * Run builder by hand to ensure everything works: `$ skynet build`
-* Add `http://YOUR_SKYNET_SERVER/PROJECT_NAME` as a WebHook URL to your repository under `Admin -> Service Hooks`
+* Add `http://YOUR_SKYNET_SERVER/PROJECT_NAME` as a Webhook Payload URL to your repository under
+ `Settings -> Webhooks & Services`. Choose `application/vnd.github.v3+form` as the Payload version.
 * Start server: `$ skynet server`
 
 Config file arguments
