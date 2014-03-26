@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe Skynet::Builder do
 
-  let(:builder)    { mock('builder').as_null_object }
-  let(:mock_class) { mock('builder class').as_null_object }
+  let(:builder)    { double('builder').as_null_object }
+  let(:mock_class) { double('builder class').as_null_object }
   let(:config)     { {type: 'static'} }
 
   describe ".for_app" do

@@ -22,13 +22,13 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'sinatra',       '~> 1.3'
   s.add_runtime_dependency 'thin',          '~> 1.4'
   s.add_runtime_dependency 'json',          '~> 1.7'
-  s.add_runtime_dependency 'jekyll',        '~> 0.11'
+  s.add_runtime_dependency 'jekyll',        '~> 1.5'
   s.add_runtime_dependency 'thor',          '~> 0.16'
-  s.add_runtime_dependency 'activesupport', '~> 3.2'
-  s.add_runtime_dependency 'activemodel',   '~> 3.2'
+  s.add_runtime_dependency 'activesupport', '~> 4.0'
+  s.add_runtime_dependency 'activemodel',   '~> 4.0'
   s.add_runtime_dependency 'multi_json',    '~> 1.0'
 
-  s.add_development_dependency 'rake',             '~> 0.9'
+  s.add_development_dependency 'rake',             '~> 10.2'
   s.add_development_dependency 'rspec',            '~> 2.11'
-  s.add_development_dependency 'shoulda-matchers', '~> 1.2'
+  s.add_development_dependency 'shoulda-matchers', '~> 2.5'
 end

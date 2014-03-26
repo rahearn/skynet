@@ -1,6 +1,9 @@
 require 'skynet/version'
 require 'logger'
 
+require 'i18n'
+I18n.enforce_available_locales = false
+
 module Skynet
 
   autoload :Builder, 'skynet/builder'
