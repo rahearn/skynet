@@ -6,7 +6,7 @@ module Skynet
 
       def execute
         Skynet.logger.debug "PWD: #{Dir.pwd} Source: #{source} Destination: #{destination}"
-        Skynet.logger.info `jekyll build #{source} #{destination}`
+        Skynet.logger.info `jekyll build --source #{source} --destination #{destination}`
 
         Skynet.logger.info 'Jekyll finished'
       end

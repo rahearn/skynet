@@ -14,7 +14,7 @@ describe Skynet::Builder::Jekyll do
 
   describe "#execute" do
     it "runs jekyll with the source and destination" do
-      subject.should_receive(:`).with "jekyll build #{source} #{dest}"
+      subject.should_receive(:`).with "jekyll build --source #{source} --destination #{dest}"
       subject.execute
     end
   end
