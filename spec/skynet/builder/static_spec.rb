@@ -13,26 +13,26 @@ describe Skynet::Builder::Static do
   end
 
   describe "#execute" do
-    before(:each) { Dir.stub(:glob).and_return [:one, :two] }
+    before(:each) { allow(Dir).to receive(:glob).and_return([:one, :two]) }
 
     it "removes destination files first" do
-      FileUtils.stub :remove_entry_secure
-      FileUtils.stub :cp_r
-      FileUtils.should_receive(:rm_rf).with [:one, :two], secure: true
+      allow(FileUtils).to receive(:remove_entry_secure)
+      allow(FileUtils).to receive(:cp_r)
+      expect(FileUtils).to receive(:rm_rf).with([:one, :two], secure: true)
       subject.execute
     end
 
     it "copies files to the destination" do
-      FileUtils.stub :rm_rf
-      FileUtils.stub :remove_entry_secure
-      FileUtils.should_receive(:cp_r).with(source, dest)
+      allow(FileUtils).to receive(:rm_rf)
+      allow(FileUtils).to receive(:remove_entry_secure)
+      expect(FileUtils).to receive(:cp_r).with(source, dest)
       subject.execute
     end
 
     it "removes .git from the destination" do
-      FileUtils.stub :rm_rf
-      FileUtils.stub :cp_r
-      FileUtils.should_receive(:remove_entry_secure).with "#{dest}/.git"
+      allow(FileUtils).to receive(:rm_rf)
+      allow(FileUtils).to receive(:cp_r)
+      expect(FileUtils).to receive(:remove_entry_secure).with("#{dest}/.git")
       subject.execute
     end
   end
