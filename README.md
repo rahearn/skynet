@@ -1,7 +1,7 @@
 Skynet
 ======
 
-[![Build Status](https://travis-ci.org/coshx/skynet.svg?branch=master)](https://travis-ci.org/coshx/skynet)
+[![Build Status](https://travis-ci.com/rahearn/skynet.svg?branch=master)](https://travis-ci.com/rahearn/skynet)
 
 GitHub-aware website builder
 
