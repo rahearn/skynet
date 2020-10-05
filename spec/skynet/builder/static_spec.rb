@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Skynet::Builder::Static do
+describe Skynet::Builder::Static, type: :model do
 
   let(:app)     { 'app' }
   let(:dest)    { '/var/www/app' }

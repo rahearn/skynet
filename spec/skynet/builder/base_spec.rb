@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Skynet::Builder::Base do
+describe Skynet::Builder::Base, type: :model do
 
   let(:source)  { File.join Dir.pwd, 'app', '.' }
   let(:url)     { 'https://github.com/org/app' }
@@ -9,13 +9,13 @@ describe Skynet::Builder::Base do
   subject       { described_class.new 'app', options }
 
   describe ".validations" do
-    # it { should validate_presence_of :app }
-    # it { should validate_presence_of :url }
-    # it { should validate_presence_of :branch }
-    # it { should validate_presence_of :destination }
-    # it { should validate_presence_of :branches }
-    # it { should ensure_inclusion_of(:type).in_array(%w[static jekyll]).allow_nil(false).allow_blank(false) }
-    # it { should_not allow_value('base').for :type }
+    it { should validate_presence_of :app }
+    it { should validate_presence_of :url }
+    it { should validate_presence_of :branch }
+    it { should validate_presence_of :destination }
+    it { should validate_presence_of :branches }
+    it { should validate_inclusion_of(:type).in_array(%w[static jekyll]).with_message("must be one of [\"static\", \"jekyll\"]") }
+    it { should_not allow_value('base').for :type }
     describe "on @branches" do
       before(:each) { subject.valid? }
 

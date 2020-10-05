@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Skynet::Builder::Jekyll do
+describe Skynet::Builder::Jekyll, type: :model do
 
   let(:app)     { 'app' }
   let(:dest)    { '/var/www/app' }
