@@ -113,13 +113,13 @@ describe Skynet::Builder::Base, type: :model do
 
       context "without key" do
         it "should call git clone" do
-          expect(subject).to receive(:`).with "git clone #{repo} app; cd #{source}; git checkout main"
+          expect(subject).to receive(:`).with "git clone #{url} app; cd #{source}; git checkout main"
           subject.send :create_repo
         end
       end
 
       context "with key" do
-        let(:options) { {key: 'keyfile', url: url, branches: {main: '/var/www'}, type: 'static'} }
+        let(:options) { {key: 'keyfile', url: url, repository: repo, branches: {main: '/var/www'}, type: 'static'} }
         it "should call git clone" do
           expect(subject).to receive(:`).with "ssh-agent bash -c 'ssh-add keyfile; git clone #{repo} app'; cd #{source}; git checkout main"
           subject.send :create_repo
