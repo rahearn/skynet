@@ -58,3 +58,8 @@ a git server other than GitHub.
 
 The URL must be visible from the Skynet server, as it will pull a new
 copy of the repository from this server.
+
+Upgrading from 1.x
+==================
+
+* Private repositories must explicitly set the `repository` key in the config to the ssh-compatible url. Previously this was optional for Github repos
