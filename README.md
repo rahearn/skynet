@@ -23,7 +23,7 @@ Usage
 * edit config file to add your repositories
 * Run builder by hand to ensure everything works: `$ skynet build`
 * Add `http://YOUR_SKYNET_SERVER/PROJECT_NAME` as a Webhook Payload URL to your repository under
- `Settings -> Webhooks & Services`. Choose `application/vnd.github.v3+form` as the Payload version.
+ `Settings -> Webhooks`. Choose `application/json` as the Content type.
 * Start server: `$ skynet server`
 
 Config file arguments

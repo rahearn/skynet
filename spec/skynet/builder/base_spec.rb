@@ -5,7 +5,7 @@ describe Skynet::Builder::Base, type: :model do
   let(:source)  { File.join Dir.pwd, 'app', '.' }
   let(:url)     { 'https://github.com/org/app' }
   let(:repo)    { 'git@github.com:org/app.git' }
-  let(:options) { {url: url, branch: 'master', destination: '/var/www', type: 'static'} }
+  let(:options) { {url: url, branches: {main: '/var/www'}, type: 'static'} }
   subject       { described_class.new 'app', options }
 
   describe ".validations" do
@@ -23,11 +23,11 @@ describe Skynet::Builder::Base, type: :model do
         specify { expect(subject.errors[:branches]).to be_empty }
       end
       context "when passed multiple valid branches" do
-        let(:options) { {url: url, type: 'static', branches: {master: '/var/www/production', develop: '/var/www/staging'}} }
+        let(:options) { {url: url, type: 'static', branches: {main: '/var/www/production', develop: '/var/www/staging'}} }
         specify { expect(subject.errors[:branches]).to be_empty }
       end
       context "when passed an invalid branch" do
-        let(:options) { {url: url, type: 'static', branches: {master: '/var/www', develop: ''}} }
+        let(:options) { {url: url, type: 'static', branches: {main: '/var/www', develop: ''}} }
         it "has an error on branches" do
           expect(subject.errors[:branches]).to include('develop must have a destination')
         end
@@ -40,7 +40,7 @@ describe Skynet::Builder::Base, type: :model do
       end
 
       context "when passed a valid key" do
-        let(:options) { {key: 'keyfile'} }
+        let(:options) { {branches: {main: "/tmp"}, key: 'keyfile'} }
         before(:each) do
           allow(File).to receive(:readable?).and_return true
           subject.valid?
@@ -49,7 +49,7 @@ describe Skynet::Builder::Base, type: :model do
       end
 
       context "when passed an invalid key" do
-        let(:options) { {key: 'missing_keyfile'} }
+        let(:options) { {branches: {main: "/tmp"}, key: 'missing_keyfile'} }
         before(:each) do
           allow(File).to receive(:readable?).and_return false
           subject.valid?
@@ -75,7 +75,7 @@ describe Skynet::Builder::Base, type: :model do
       it { expect { subject.build }.to raise_error ArgumentError }
     end
     context "when passing a branch" do
-      it { expect { subject.build 'master' }.to_not raise_error }
+      it { expect { subject.build 'main' }.to_not raise_error }
       it "d" do
         subject.build 'develop'
       end
@@ -84,7 +84,7 @@ describe Skynet::Builder::Base, type: :model do
 
   context "private methods" do
     before(:each) do
-      subject.branch      = 'master'
+      subject.branch      = 'main'
       subject.destination = '/var/www'
     end
 
@@ -113,15 +113,15 @@ describe Skynet::Builder::Base, type: :model do
 
       context "without key" do
         it "should call git clone" do
-          expect(subject).to receive(:`).with "git clone #{repo} app; cd #{source}; git checkout master"
+          expect(subject).to receive(:`).with "git clone #{repo} app; cd #{source}; git checkout main"
           subject.send :create_repo
         end
       end
 
       context "with key" do
-        let(:options) { {key: 'keyfile', url: url, branch: 'master', destination: '/var/www', type: 'static'} }
+        let(:options) { {key: 'keyfile', url: url, branches: {main: '/var/www'}, type: 'static'} }
         it "should call git clone" do
-          expect(subject).to receive(:`).with "ssh-agent bash -c 'ssh-add keyfile; git clone #{repo} app'; cd #{source}; git checkout master"
+          expect(subject).to receive(:`).with "ssh-agent bash -c 'ssh-add keyfile; git clone #{repo} app'; cd #{source}; git checkout main"
           subject.send :create_repo
         end
       end
@@ -130,15 +130,15 @@ describe Skynet::Builder::Base, type: :model do
     describe "#update_repo" do
       context "without key" do
         it "should call git pull" do
-          expect(subject).to receive(:`).with "cd #{source}; git checkout master; git pull origin master"
+          expect(subject).to receive(:`).with "cd #{source}; git checkout main; git pull origin main"
           subject.send :update_repo
         end
       end
 
       context "with key" do
-        let(:options) { {key: 'keyfile', url: url, branch: 'master', destination: '/var/www', type: 'static'} }
+        let(:options) { {key: 'keyfile', url: url, branches: {main: '/var/www'}, type: 'static'} }
         it "should call git pull" do
-          expect(subject).to receive(:`).with "cd #{source}; git checkout master; ssh-agent bash -c 'ssh-add keyfile; git pull origin master'"
+          expect(subject).to receive(:`).with "cd #{source}; git checkout main; ssh-agent bash -c 'ssh-add keyfile; git pull origin main'"
           subject.send :update_repo
         end
       end

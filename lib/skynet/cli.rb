@@ -22,11 +22,7 @@ module Skynet
     method_option :file, type: :string, default: './config.yml', aliases: '-f', desc: 'Configuration file'
     method_option :log, type: :string, aliases: '-l', desc: 'Log file'
     def server
-      Skynet.logger = if options[:log].nil?
-        Logger.new $stdout
-      else
-        Logger.new options[:log], 'weekly'
-      end
+      Skynet.logger = Logger.new(options[:log], 'weekly') unless options[:log].nil?
 
       unless File.exist? options[:file]
         Skynet.logger.fatal "Configuration file #{options[:file]} cannot be found"

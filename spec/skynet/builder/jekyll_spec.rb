@@ -4,7 +4,7 @@ describe Skynet::Builder::Jekyll, type: :model do
 
   let(:app)     { 'app' }
   let(:dest)    { '/var/www/app' }
-  let(:options) { {destination: dest} }
+  let(:options) { {branches: {main: dest}} }
   let(:source)  { File.join Dir.pwd, app, '.' }
   subject do
     described_class.new(app, options).tap do |b|
