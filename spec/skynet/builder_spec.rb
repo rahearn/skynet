@@ -10,8 +10,8 @@ describe Skynet::Builder do
     let(:args) { [:app, config] }
 
     it "initializes a new builder class" do
-      described_class.should_receive(:const_get).with('Static').and_return mock_class
-      mock_class.should_receive(:new).with(:app, config).and_return builder
+      expect(described_class).to receive(:const_get).with('Static').and_return(mock_class)
+      expect(mock_class).to receive(:new).with(:app, config).and_return(builder)
 
       described_class.for_app *args
     end
@@ -21,8 +21,8 @@ describe Skynet::Builder do
     let(:args) { [:app, config, :master] }
 
     it "calls build on the new builder" do
-      described_class.stub(:for_app).and_return builder
-      builder.should_receive(:build).with :master
+      allow(described_class).to receive(:for_app).and_return(builder)
+      expect(builder).to receive(:build).with(:master)
 
       described_class.build *args
     end

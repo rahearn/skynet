@@ -1,7 +1,7 @@
 Skynet
 ======
 
-[![Build Status](https://travis-ci.org/coshx/skynet.svg?branch=master)](https://travis-ci.org/coshx/skynet)
+[![Build Status](https://travis-ci.com/rahearn/skynet.svg?branch=master)](https://travis-ci.com/rahearn/skynet)
 
 GitHub-aware website builder
 
@@ -23,7 +23,7 @@ Usage
 * edit config file to add your repositories
 * Run builder by hand to ensure everything works: `$ skynet build`
 * Add `http://YOUR_SKYNET_SERVER/PROJECT_NAME` as a Webhook Payload URL to your repository under
- `Settings -> Webhooks & Services`. Choose `application/vnd.github.v3+form` as the Payload version.
+ `Settings -> Webhooks`. Choose `application/json` as the Content type.
 * Start server: `$ skynet server`
 
 Config file arguments
@@ -58,3 +58,8 @@ a git server other than GitHub.
 
 The URL must be visible from the Skynet server, as it will pull a new
 copy of the repository from this server.
+
+Upgrading from 1.x
+==================
+
+* Private repositories must explicitly set the `repository` key in the config to the ssh-compatible url. Previously this was optional for Github repos

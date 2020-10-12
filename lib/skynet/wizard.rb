@@ -19,9 +19,9 @@ module Skynet
     def repository_url
       if ask('Is the repository on github? (y/n)').downcase == 'y'
         @github = true
-        owner = ask 'Repository owner:'
-        project = ask 'Github project name:'
-        "https://github.com/#{owner}/#{project}"
+        @owner = ask 'Repository owner:'
+        @project = ask 'Github project name:'
+        "https://github.com/#{@owner}/#{@project}"
       else
         @github = false
         ask 'Repository URL:'
@@ -40,9 +40,13 @@ module Skynet
     def private_key
       needs_key = ask('Is this a private repository? (y/n)').downcase
       if needs_key == 'y'
-        ["  key: #{ask 'Full path to ssh key:'}"].tap do |pk|
-          pk << "  repository: #{ask 'SSH repository address:'}" unless @github
-        end.join "\n"
+        private_configs = ["  key: #{ask 'Full path to ssh key:'}"]
+        if @github
+          private_configs << "  repository: git@github.com:#{@owner}/#{@project}.git"
+        else
+          private_configs << "  repository: #{ask 'SSH repository address:'}"
+        end
+        private_configs.join "\n"
       else
         nil
       end

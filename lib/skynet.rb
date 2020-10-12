@@ -13,7 +13,7 @@ module Skynet
   autoload :HookGenerator, 'skynet/hook_generator'
 
   def self.logger
-    @logger ||= Logger.new(STDOUT)
+    @logger ||= Logger.new($stdout)
   end
 
   def self.logger=(logger)

@@ -13,7 +13,7 @@ module Skynet
       attr_accessor :app, :url, :branch, :destination, :branches, :type, :repository
       attr_reader :source, :key
 
-      validates_presence_of :app, :url, :branch, :destination, :branches
+      validates_presence_of :app, :url, :branches, :branch, :destination
       validates_inclusion_of :type,
         in: ALLOWED_BUILDERS,
         message: "must be one of #{ALLOWED_BUILDERS}"
@@ -26,24 +26,26 @@ module Skynet
         @source  = File.join Dir.pwd, app, '.'
         @key     = config[:key]
 
-        if config[:branches].blank?
-          Skynet.logger.warn "Passing a single branch and destination is deprecated and will be removed in 2.0"
-          Skynet.logger.warn "Please change to:\nbranches:\n  #{config[:branch]}: #{config[:destination]}"
-          self.branches = { config[:branch] => config[:destination] }
-        else
-          self.branches = config[:branches]
+        self.branches = config[:branches]
+        if branches.present? && branches.first.present?
+          self.branch      = branches.first[0]
+          self.destination = branches.first[1]
         end
-        self.branch      = branches.first[0]
-        self.destination = branches.first[1]
-        self.url         = config[:url]
-        self.type        = config[:type]
-        self.repository  = config[:repository]
+        self.url        = config[:url]
+        self.type       = config[:type]
+        self.repository = config[:repository]
       end
 
       def build(branch=nil)
-        unless branch.blank?
+        if branch.present?
           return if branches[branch].blank?
           self.branches = { branch => branches[branch] }
+        end
+
+        unless valid?
+          Skynet.logger.error "Configuration error for #{app} (branch: #{branch})"
+          Skynet.logger.error errors.full_messages.join '. '
+          raise ArgumentError
         end
 
         branches.each_pair do |branch, destination|
@@ -70,18 +72,7 @@ module Skynet
       end
 
       def remote_repository
-        repository || translate_url
-      end
-
-      def translate_url
-        uri = URI.parse url
-        if uri.host == 'github.com'
-          "git@github.com:#{uri.path.gsub %r[(^/)|(/$)|(\.git$)], ''}.git"
-        else
-          url
-        end
-      rescue URI::InvalidURIError
-        url
+        repository || url
       end
 
       def create_repo
