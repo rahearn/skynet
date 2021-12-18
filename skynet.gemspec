@@ -30,5 +30,5 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'rake',             '~> 13.0'
   s.add_development_dependency 'rspec',            '~> 3.9'
-  s.add_development_dependency 'shoulda-matchers', '~> 4.4'
+  s.add_development_dependency 'shoulda-matchers', '~> 5.0'
 end
