@@ -93,7 +93,7 @@ module Skynet
     desc 'config', 'Run a wizard to append a new project to existing config.yml'
     method_option :file, type: :string, default: './config.yml', aliases: '-f', desc: 'Configuration file'
     def config
-      copy_file 'config.yml', options[:file] unless File.exists? options[:file]
+      copy_file 'config.yml', options[:file] unless File.exist? options[:file]
       run_wizard options[:file]
     end
 
@@ -102,7 +102,7 @@ module Skynet
     method_option :output, type: :string, default: './post-receive', aliases: '-o', desc: 'Output file'
     method_option :server, type: :string, default: 'http://localhost:7575', aliases: '-s', desc: 'Location of running skynet server'
     def hook(project)
-      if File.exists? options[:output]
+      if File.exist? options[:output]
         Skynet.logger.fatal %{Output file "#{options[:output]}" already exists}
         exit 1
       end
@@ -118,7 +118,7 @@ module Skynet
     end
 
     def load_configuration(file)
-      unless File.exists? file
+      unless File.exist? file
         Skynet.logger.fatal %{Configuration file "#{file}" does not exist}
         exit 1
       end
