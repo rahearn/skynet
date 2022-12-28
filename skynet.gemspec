@@ -19,13 +19,13 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_runtime_dependency 'sinatra',       '~> 2.1'
+  s.add_runtime_dependency 'sinatra',       '~> 3.0'
   s.add_runtime_dependency 'thin',          '~> 1.7'
   s.add_runtime_dependency 'json',          '~> 2.3'
   s.add_runtime_dependency 'jekyll',        '~> 4.1'
   s.add_runtime_dependency 'thor',          '~> 1.0'
-  s.add_runtime_dependency 'activesupport', '~> 6.0'
-  s.add_runtime_dependency 'activemodel',   '~> 6.0'
+  s.add_runtime_dependency 'activesupport', '~> 7.0'
+  s.add_runtime_dependency 'activemodel',   '~> 7.0'
   s.add_runtime_dependency 'multi_json',    '~> 1.15'
 
   s.add_development_dependency 'rake',             '~> 13.0'
