@@ -1,8 +1,6 @@
 Skynet
 ======
 
-[![Build Status](https://travis-ci.com/rahearn/skynet.svg?branch=master)](https://travis-ci.com/rahearn/skynet)
-
 GitHub-aware website builder
 
 Skynet builds and deploys web sites on your VPS or bare metal server. It is triggered by the post-receive hook.

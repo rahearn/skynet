@@ -1,8 +1,0 @@
-language: ruby
-rvm:
-  - 3.0
-  - ruby-head
-matrix:
-  allow_failures:
-    - rvm: ruby-head
-script: bundle exec rake spec
